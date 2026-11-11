@@ -1,2 +1,7 @@
 .vercel
 .env*.local
+node_modules/
+dist/
+.aistudio/
+public/assets/aistudio/
+bun.lock

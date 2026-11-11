@@ -54,7 +54,7 @@ document.querySelectorAll('section:not(.hero)').forEach(section => {
 // ─── OPTIMIZED BACKGROUND SCROLL PARALLAX ───
 if (document.getElementById('bg-dots')) {
   gsap.to('#bg-dots', {
-    y: '180px',
+    y: '80px',
     ease: 'none',
     scrollTrigger: {
       trigger: 'body',
@@ -67,15 +67,31 @@ if (document.getElementById('bg-dots')) {
 
 // ─── PLAY VIDEO ON CLICK — event delegation so clones work too ───
 function handleCardClick(card) {
-  const videoId  = card.getAttribute('data-video');
-  const localSrc = card.getAttribute('data-local-video');
-  const thumb    = card.querySelector('.project-thumb') || card.querySelector('.short-thumb');
+  const videoId   = card.getAttribute('data-video');
+  const localSrc  = card.getAttribute('data-local-video');
+  const posterSrc = card.getAttribute('data-poster') || '';
+  const thumb     = card.querySelector('.project-thumb') || card.querySelector('.short-thumb');
 
   if (thumb && !card.classList.contains('is-playing')) {
+    // Pause any other currently playing local videos
+    document.querySelectorAll('video.video-frame').forEach(v => {
+      try { v.pause(); } catch (e) {}
+    });
+
     if (localSrc) {
-      thumb.innerHTML = `<video class="video-frame" src="${localSrc}" controls style="width:100%;height:100%;object-fit:cover;border-radius:inherit;"></video>`;
+      const encodedSrc = encodeURI(localSrc);
+      const posterAttr = posterSrc ? `poster="${encodeURI(posterSrc)}"` : '';
+      thumb.innerHTML = `<video class="video-frame" src="${encodedSrc}" ${posterAttr} controls autoplay playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;"></video>`;
       const vid = thumb.querySelector('video.video-frame');
-      if (vid) { vid.currentTime = 0; vid.play().catch(() => {}); }
+      if (vid) {
+        const playPromise = vid.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            vid.muted = true;
+            vid.play().catch(() => {});
+          });
+        }
+      }
     } else if (videoId) {
       thumb.innerHTML = `<iframe class="video-frame" src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
     }
@@ -362,15 +378,16 @@ function setupCollapseToggle(toggleId, contentId) {
 setupCollapseToggle('toggle-work', 'content-work');
 setupCollapseToggle('toggle-shorts', 'content-shorts');
 
-// ─── IMAGE PREVIEW MODAL LIGHTBOX ───
+// ─── IMAGE PREVIEW MODAL LIGHTBOX (MOBILE & DESKTOP) ───
 const imgModal = document.getElementById('img-modal');
 const imgModalPreview = document.getElementById('img-modal-preview');
 const imgModalCaption = document.getElementById('img-modal-caption');
 const imgModalClose = document.getElementById('img-modal-close');
 
 function openImgModal(src, caption) {
-  if (!imgModal || !imgModalPreview) return;
-  imgModalPreview.src = src;
+  if (!imgModal || !imgModalPreview || !src) return;
+  const safeSrc = encodeURI(src);
+  imgModalPreview.src = safeSrc;
   if (imgModalCaption) {
     imgModalCaption.textContent = caption || '';
     imgModalCaption.style.display = caption ? 'block' : 'none';
@@ -384,8 +401,10 @@ function closeImgModal() {
   imgModal.classList.remove('active');
   document.body.style.overflow = '';
   setTimeout(() => {
-    if (imgModalPreview) imgModalPreview.src = '';
-  }, 300);
+    if (imgModalPreview && !imgModal.classList.contains('active')) {
+      imgModalPreview.removeAttribute('src');
+    }
+  }, 260);
 }
 
 if (imgModalClose) {
@@ -409,17 +428,28 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// Trigger preview for any .img-preview-trigger element
-document.querySelectorAll('.img-preview-trigger').forEach(el => {
-  el.addEventListener('click', (e) => {
+// Delegated listener for .img-preview-trigger and review cards on mobile & desktop
+document.addEventListener('click', (e) => {
+  // Ignore clicks on external anchor links
+  if (e.target.closest('a[href]')) return;
+
+  const trigger = e.target.closest('.img-preview-trigger');
+  if (trigger) {
     e.preventDefault();
     e.stopPropagation();
-    const src = el.getAttribute('data-preview');
-    const caption = el.getAttribute('data-caption');
-    if (src) {
-      openImgModal(src, caption);
+    openImgModal(trigger.getAttribute('data-preview'), trigger.getAttribute('data-caption'));
+    return;
+  }
+
+  // Also allow tapping anywhere on a review card that has a proof preview trigger
+  const reviewCard = e.target.closest('.review-card, .fe4r-showcase-card, .horizontal-review-card');
+  if (reviewCard) {
+    const cardTrigger = reviewCard.querySelector('.img-preview-trigger');
+    if (cardTrigger) {
+      e.preventDefault();
+      openImgModal(cardTrigger.getAttribute('data-preview'), cardTrigger.getAttribute('data-caption'));
     }
-  });
+  }
 });
 
 // ─── THEME SWITCHER CONTROLLER (DEFAULT CLEAN WHITE / MAIN THEME) ───
