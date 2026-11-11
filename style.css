@@ -4,31 +4,31 @@
    ========================================================================== */
 
 :root {
-  /* Default Light Theme */
-  --bg-color: #FAFAFC;
-  --bg-alt: #F3F4F8;
-  --bg-warm: #F6F5FA;
-  --card-bg: #FFFFFF;
-  --card-bg-elevated: #FFFFFF;
+  /* Permanent Dark Theme */
+  --bg-color: #09080F;
+  --bg-alt: #0E0C17;
+  --bg-warm: #131120;
+  --card-bg: #110F1C;
+  --card-bg-elevated: #171426;
 
   /* Borders */
-  --border-color: rgba(15, 23, 42, 0.08);
-  --border-subtle: rgba(0, 0, 0, 0.04);
-  --border-purple: rgba(124, 58, 237, 0.2);
-  --border-purple-hover: rgba(124, 58, 237, 0.45);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --border-purple: rgba(167, 139, 250, 0.22);
+  --border-purple-hover: rgba(167, 139, 250, 0.5);
 
   /* Clean Purple Accent */
-  --accent-purple: #7C3AED;
-  --accent-purple-light: #A78BFA;
-  --accent-purple-dark: #6D28D9;
-  --accent-purple-deep: #5B21B6;
-  --accent-purple-soft: rgba(124, 58, 237, 0.08);
-  --accent-purple-glow: rgba(124, 58, 237, 0.16);
+  --accent-purple: #A78BFA;
+  --accent-purple-light: #C4B5FD;
+  --accent-purple-dark: #7C3AED;
+  --accent-purple-deep: #6D28D9;
+  --accent-purple-soft: rgba(139, 92, 246, 0.12);
+  --accent-purple-glow: rgba(139, 92, 246, 0.22);
 
   /* Typography */
-  --text-main: #0F172A;
-  --text-secondary: #1E293B;
-  --text-muted: #64748B;
+  --text-main: #FFFFFF;
+  --text-secondary: #E2E8F0;
+  --text-muted: #94A3B8;
   --text-white: #FFFFFF;
 
   --font-main: 'Plus Jakarta Sans', sans-serif;
@@ -40,16 +40,16 @@
   --radius-sm: 12px;
   --radius-xs: 8px;
 
-  /* Shadows — soft & crisp */
-  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
-  --shadow-card: 0 8px 30px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04);
-  --shadow-card-hover: 0 18px 48px -8px rgba(124, 58, 237, 0.16), 0 0 0 1px rgba(124, 58, 237, 0.22);
-  --shadow-elevated: 0 20px 60px -12px rgba(15, 23, 42, 0.14);
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.45);
+  --shadow-card: 0 12px 36px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  --shadow-card-hover: 0 20px 52px -8px rgba(124, 58, 237, 0.25), 0 0 0 1px rgba(167, 139, 250, 0.35);
+  --shadow-elevated: 0 24px 64px -12px rgba(0, 0, 0, 0.75);
 
   /* Nav & Components */
-  --nav-scrolled-bg: rgba(250, 250, 252, 0.88);
-  --nav-links-bg: rgba(255, 255, 255, 0.9);
-  --niches-bg: rgba(243, 244, 248, 0.8);
+  --nav-scrolled-bg: rgba(9, 8, 15, 0.88);
+  --nav-links-bg: rgba(17, 15, 28, 0.88);
+  --niches-bg: rgba(14, 12, 23, 0.8);
 }
 
 /* ─── DARK THEME OVERRIDE (CLEAN PROFESSIONAL DARK + WHITE TEXT) ─── */
@@ -339,53 +339,6 @@ body {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-}
-
-/* ─── THEME TOGGLE BUTTON ─── */
-.theme-toggle-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: var(--card-bg);
-  border: 1px solid var(--border-purple);
-  color: var(--accent-purple-light);
-  cursor: pointer;
-  font-size: 0.95rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: var(--shadow-sm);
-  flex-shrink: 0;
-}
-
-.theme-toggle-btn:hover {
-  border-color: var(--accent-purple);
-  color: #FFFFFF;
-  background: var(--accent-purple);
-  transform: scale(1.08) rotate(15deg);
-  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.35);
-}
-
-/* Default (White Theme): Show Moon icon to switch to Dark */
-.theme-toggle-btn .icon-sun {
-  display: none;
-}
-.theme-toggle-btn .icon-moon {
-  display: inline-block;
-  color: var(--accent-purple);
-}
-
-/* Dark Mode Override: Show Sun icon to switch to Light */
-[data-theme="dark"] .theme-toggle-btn .icon-moon {
-  display: none;
-}
-[data-theme="dark"] .theme-toggle-btn .icon-sun {
-  display: inline-block;
-  color: #FFFFFF;
-}
-[data-theme="dark"] .theme-toggle-btn:hover .icon-sun {
-  color: #FFFFFF;
 }
 
 .btn-ytjobs {
@@ -2638,13 +2591,13 @@ body {
   }
 }
 
-/* ─── SIMPLE COMIC BOLD FOOTER OVER DISSOLVING CONTACT BACKDROP ─── */
+/* ─── BOLD FULL-WIDTH FOOTER WITH TEXT DISSOLVE & SCROLL-TO-TOP ─── */
 
 .footer {
   position: relative;
   z-index: 1;
   overflow: hidden;
-  padding: 2rem 0 3.75rem;
+  padding: 2rem 0 3.5rem;
   background: transparent;
   border-top: none;
 }
@@ -2664,17 +2617,26 @@ body {
 }
 
 .footer-brand-statement {
-  font-family: 'Bangers', 'Luckiest Guy', 'Comic Sans MS', cursive, sans-serif;
-  font-size: clamp(3.2rem, 11vw, 9rem);
-  font-weight: 400;
-  letter-spacing: 0.06em;
-  line-height: 1.02;
+  display: block;
+  width: 100%;
+  font-family: var(--font-main);
+  font-size: clamp(2.2rem, 11vw, 8.6rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.96;
   color: #FFFFFF;
   text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
   user-select: none;
-  text-shadow:
-    0 4px 0 rgba(0, 0, 0, 0.45),
-    0 12px 32px rgba(0, 0, 0, 0.65);
+  mask-image: linear-gradient(180deg, #000 0%, #000 32%, rgba(0, 0, 0, 0.08) 100%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 32%, rgba(0, 0, 0, 0.08) 100%);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+}
+
+.footer-brand-statement:hover {
+  transform: translateY(-4px);
+  opacity: 0.92;
 }
 
 /* ─── ANIMATIONS ─── */

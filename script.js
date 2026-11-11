@@ -452,39 +452,14 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// ─── THEME SWITCHER CONTROLLER (DEFAULT CLEAN WHITE / MAIN THEME) ───
-const themeToggleBtn = document.getElementById('theme-toggle-btn');
-const rootElement = document.documentElement;
+// ─── PERMANENT DARK THEME & FOOTER SCROLL-TO-TOP ───
+document.documentElement.setAttribute('data-theme', 'dark');
 
-function applyTheme(theme) {
-  if (theme === 'dark') {
-    rootElement.setAttribute('data-theme', 'dark');
-    localStorage.setItem('wv_theme_v2', 'dark');
-  } else {
-    rootElement.removeAttribute('data-theme');
-    localStorage.setItem('wv_theme_v2', 'light');
-  }
-
-  // Update Cal.com booking embed theme seamlessly
-  const calIframe = document.querySelector('.cal-iframe');
-  if (calIframe) {
-    const isDark = theme === 'dark';
-    const calTheme = isDark ? 'dark' : 'light';
-    const newSrc = `https://cal.com/waterrvisuals/15min?embed=true&theme=${calTheme}&brandColor=%237C3AED&overlayCalendar=true`;
-    if (calIframe.src !== newSrc) {
-      calIframe.src = newSrc;
-    }
-  }
-}
-
-// Initialize theme from saved preference (Default is 'light')
-const initialTheme = localStorage.getItem('wv_theme_v2') || 'light';
-applyTheme(initialTheme);
-
-if (themeToggleBtn) {
-  themeToggleBtn.addEventListener('click', () => {
-    const isCurrentlyDark = rootElement.getAttribute('data-theme') === 'dark';
-    const nextTheme = isCurrentlyDark ? 'light' : 'dark';
-    applyTheme(nextTheme);
+const footerScrollTop = document.getElementById('footer-scroll-top');
+if (footerScrollTop) {
+  footerScrollTop.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }
+
